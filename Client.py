@@ -3,6 +3,7 @@ from time import sleep
 
 from PodSixNet.Connection import connection, ConnectionListener
 
+
 class Client(ConnectionListener):
     def __init__(self, host, port):
         self.Connect((host, port))
@@ -15,6 +16,19 @@ class Client(ConnectionListener):
     def Network_initial(self, data):
         #self.players = data['lines']
         print(data['message'])
+
+    def Network_connected(self, data):
+        self.statusLabel = "connected"
+
+    def Network_error(self, data):
+        print(data)
+        import traceback
+        traceback.print_exc()
+        self.statusLabel = data['error'][1]
+        connection.Close()
+
+    def Network_disconnected(self, data):
+        self.statusLabel += " - disconnected"
 
 
 if len(sys.argv) != 2:
