@@ -11,10 +11,10 @@ class Client(ConnectionListener):
     def Loop(self):
         self.Pump()
         connection.Pump()
-        self.Events()
 
-        if "connecting" in self.statusLabel:
-            self.statusLabel = "connecting..."
+    def Network_initial(self, data):
+        #self.players = data['lines']
+        pass
 
 
 if len(sys.argv) != 2:
