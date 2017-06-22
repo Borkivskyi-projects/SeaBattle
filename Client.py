@@ -26,8 +26,6 @@ class Client(ConnectionListener):
 
     def Network_error(self, data):
         print(data)
-        import traceback
-        traceback.print_exc()
         self.statusLabel = data['error'][1]
         connection.Close()
 
