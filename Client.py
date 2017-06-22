@@ -13,10 +13,9 @@ class Client(ConnectionListener):
     def Loop(self):
         self.Pump()
         connection.Pump()
-        self.Input()
 
     def Input(self):
-        connection.Send({"action": "message", "message": sys.stdin.readline().rstrip("\n"),'name':self.name})
+        connection.Send({"action": "message", "message": '1','name':self.name})
 
     def Network_message(self, data):
         print(data['name'] + " : " + data['message'])
