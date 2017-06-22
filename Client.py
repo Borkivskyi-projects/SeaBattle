@@ -7,15 +7,19 @@ from PodSixNet.Connection import connection, ConnectionListener
 class Client(ConnectionListener):
     def __init__(self, host, port):
         self.Connect((host, port))
+        self.name = input("Enter your username: ")
         self.players = {}
 
     def Loop(self):
         self.Pump()
         connection.Pump()
 
-    def Network_initial(self, data):
-        #self.players = data['lines']
-        print(data['message'])
+    def input(self):
+        while 1:
+            connection.Send({"action": "message", "message": sys.stdin.readline().rstrip("\n")})
+
+    def Network_message(self, data):
+        print(data['name'] + " : " + data['message'])
 
     def Network_connected(self, data):
         self.statusLabel = "connected"
