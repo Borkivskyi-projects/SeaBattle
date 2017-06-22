@@ -14,7 +14,7 @@ class Client(ConnectionListener):
 
     def Network_initial(self, data):
         #self.players = data['lines']
-        pass
+        print(data['message'])
 
 
 if len(sys.argv) != 2:
