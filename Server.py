@@ -14,7 +14,7 @@ class ServerChannel(Channel):
         self._server.DelPlayer(self)
 
     def Network_message(self, data):
-        self._server.SendToAll({"action": "message", "message": data['message'], "who": data['name']})
+        self._server.SendToAll({"action": "message", "message": data['message'], "name": data['name']})
 
 
 class GameServer(Server):
