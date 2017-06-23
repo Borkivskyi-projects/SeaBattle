@@ -11,7 +11,9 @@ class ServerChannel(Channel):
         self.id = str(self._server.NextId())
 
     def Close(self):
-        self._server.DelPlayer(self)
+        print("Deleting Player" + str(self.addr))
+        del self._server.players[self]
+        self._server.SendPlayers()
 
     def Network_message(self, data):
         self._server.SendToAll({"action": "message", "message": data['message'], "name": data['name']})
@@ -25,24 +27,27 @@ class GameServer(Server):
         Server.__init__(self, *args, **kwargs)
         self.players = {}
         print('Server started')
+        self.games = []
+        self.game_id = 0
 
     def NextId(self):
         self.id += 1
         return self.id
 
     def Connected(self, channel, addr):
-        self.AddPlayer(channel)
-
-    def AddPlayer(self, player):
-        print("New Player" + str(player.addr))
-        self.players[player] = True
-        #player.Send({"action": "initial", 'message':'Pryvit Anton'})
+        print("New Player" + str(channel.addr))
+        self.players[channel] = True
+        #channel.Send({"action": "initial", 'message':'Pryvit Anton'})
         #self.SendPlayers()
 
     def DelPlayer(self, player):
         print("Deleting Player" + str(player.addr))
         del self.players[player]
-        #self.SendPlayers()
+        self.SendPlayers()
+
+    def SendPlayers(self):
+        self.SendToAll({'action':'message','server':','.join([str(p) for p in range(len(self.players))])})
+
 
     def SendToAll(self, data):
         [p.Send(data) for p in self.players]

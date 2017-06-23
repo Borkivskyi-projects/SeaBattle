@@ -5,9 +5,9 @@ from PodSixNet.Connection import connection, ConnectionListener
 
 
 class Client(ConnectionListener):
-    def __init__(self, host, port):
+    def __init__(self, host, port, name):
         self.Connect((host, port))
-        self.name = input("Enter your username: ")
+        self.name = name
         self.players = {}
 
     def Loop(self):
@@ -37,7 +37,8 @@ if len(sys.argv) != 2:
     print("e.g.", sys.argv[0], "localhost:31425")
 else:
     host, port = sys.argv[1].split(":")
-    c = Client(host, int(port))
+    
+    c = Client(host, int(port), input("Enter your username: "))
     while 1:
         c.Loop()
         sleep(0.001)
