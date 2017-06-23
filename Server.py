@@ -8,7 +8,6 @@ from PodSixNet.Channel import Channel
 class ServerChannel(Channel):
     def __init__(self, *args, **kwargs):
         Channel.__init__(self, *args, **kwargs)
-        self.id = str(self._server.NextId())
 
     def Close(self):
         print("Deleting Player" + str(self.addr))
@@ -23,31 +22,20 @@ class GameServer(Server):
     channelClass = ServerChannel
 
     def __init__(self, *args, **kwargs):
-        self.id = 0
         Server.__init__(self, *args, **kwargs)
         self.players = {}
         print('Server started')
         self.games = []
         self.game_id = 0
 
-    def NextId(self):
-        self.id += 1
-        return self.id
-
     def Connected(self, channel, addr):
         print("New Player" + str(channel.addr))
         self.players[channel] = True
         #channel.Send({"action": "initial", 'message':'Pryvit Anton'})
-        #self.SendPlayers()
-
-    def DelPlayer(self, player):
-        print("Deleting Player" + str(player.addr))
-        del self.players[player]
         self.SendPlayers()
 
     def SendPlayers(self):
-        self.SendToAll({'action':'message','server':','.join([str(p) for p in range(len(self.players))])})
-
+        self.SendToAll({'action':'message','name':'server','message':','.join([str(p) for p in range(len(self.players))])})
 
     def SendToAll(self, data):
         [p.Send(data) for p in self.players]
